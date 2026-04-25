@@ -1,0 +1,13 @@
+; Engine configuration file.
+config_version=5
+
+[application]
+config/name="Age of Horizons"
+run/main_scene="res://scenes/Main.tscn"
+config/features=PackedStringArray("4.2", "C#")
+
+[dotnet]
+project/assembly_name="AgeOfHorizons"
+
+[rendering]
+renderer/rendering_method="mobile"

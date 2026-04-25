@@ -1,0 +1,6 @@
+[
+  {"id":"surveying","name":"Surveying","cost":15,"prereqs":[],"unlocksUnits":["worker"],"unlocksBuildings":[]},
+  {"id":"civic_foundations","name":"Civic Foundations","cost":25,"prereqs":["surveying"],"unlocksUnits":[],"unlocksBuildings":["granary_dome"]},
+  {"id":"metal_shaping","name":"Metal Shaping","cost":30,"prereqs":["surveying"],"unlocksUnits":[],"unlocksBuildings":["forge_hall"]},
+  {"id":"star_math","name":"Star Math","cost":35,"prereqs":["civic_foundations"],"unlocksUnits":[],"unlocksBuildings":["observatory"]}
+]
