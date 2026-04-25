@@ -1,0 +1,5 @@
+[
+  {"id":"settler","name":"Settler Caravan","move":2,"strength":4,"canFoundCity":true,"cost":30},
+  {"id":"scout","name":"Pathfinder","move":3,"strength":8,"canFoundCity":false,"cost":20},
+  {"id":"worker","name":"Civic Crew","move":2,"strength":10,"canFoundCity":false,"cost":25}
+]

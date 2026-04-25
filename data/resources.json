@@ -1,0 +1,5 @@
+[
+  {"id":"ambergrain","name":"Amber Grain","food":1,"production":0,"science":0},
+  {"id":"skyiron","name":"Sky Iron","food":0,"production":1,"science":0},
+  {"id":"crystalmoss","name":"Crystal Moss","food":0,"production":0,"science":1}
+]
