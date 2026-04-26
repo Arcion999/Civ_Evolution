@@ -5,6 +5,7 @@ Age of Horizons is an original turn-based 4X prototype (explore, expand, exploit
 ## Setup Instructions
 
 ### Prerequisites
+- Godot 4.6.2 Mono/.NET build (or newer 4.6.x)
 - Godot 4.x Mono/.NET build
 - .NET 8 SDK
 
