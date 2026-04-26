@@ -1,4 +1,5 @@
 <Project Sdk="Godot.NET.Sdk/4.6.2">
+<Project Sdk="Godot.NET.Sdk/4.2.2">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
@@ -19,6 +20,12 @@
     <Compile Remove="obj/**/*.cs" />
   </ItemGroup>
 
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="src/AgeOfHorizons.Core/AgeOfHorizons.Core.csproj" />
+    <Compile Remove="src/AgeOfHorizons.Core/**/*.cs" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="data\**\*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
