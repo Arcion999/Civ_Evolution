@@ -38,6 +38,8 @@ public partial class CameraController : Camera2D
         {
             if (mb.ButtonIndex == MouseButton.WheelUp) _targetZoom = Mathf.Clamp(_targetZoom * 1.08f, MinZoom, MaxZoom);
             if (mb.ButtonIndex == MouseButton.WheelDown) _targetZoom = Mathf.Clamp(_targetZoom * 0.92f, MinZoom, MaxZoom);
+            if (mb.ButtonIndex == MouseButton.WheelUp) Zoom *= 1.1f;
+            if (mb.ButtonIndex == MouseButton.WheelDown) Zoom *= 0.9f;
         }
     }
 }

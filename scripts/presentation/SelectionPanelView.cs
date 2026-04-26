@@ -1,6 +1,7 @@
 using Godot;
 
 public partial class SelectionPanelView : RichTextLabel
+public partial class SelectionPanelView : Label
 {
     public void Render(GameSceneController controller)
     {
@@ -18,5 +19,10 @@ public partial class SelectionPanelView : RichTextLabel
         }
 
         Text = "[b]Selection[/b]: nothing selected";
+            Text = $"Selected Unit: {controller.SelectedUnit.UnitDefId} @ {controller.SelectedUnit.Coord}\nShift+Click: Move";
+        else if (controller.SelectedTile != null)
+            Text = $"Tile: {controller.SelectedTile}";
+        else
+            Text = "Nothing selected";
     }
 }

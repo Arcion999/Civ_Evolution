@@ -11,3 +11,5 @@ public partial class DiplomacyPanelView : RichTextLabel
         Text = "[b]Diplomacy[/b]\n" + string.Join("\n", lines);
     }
 }
+using Godot;
+public partial class DiplomacyPanelView : Control { }

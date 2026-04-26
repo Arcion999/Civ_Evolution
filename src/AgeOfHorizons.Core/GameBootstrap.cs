@@ -11,6 +11,10 @@ public static class GameBootstrap
     private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
 
     public static GameConfig LoadConfig(string projectRoot) => LoadConfigFromDirectory(Path.Combine(projectRoot, "data"));
+    public static GameConfig LoadConfig(string projectRoot)
+    {
+        return LoadConfigFromDirectory(Path.Combine(projectRoot, "data"));
+    }
 
     public static GameConfig LoadConfigFromDirectory(string dataDirectory)
     {
@@ -36,16 +40,45 @@ public static class GameBootstrap
         var state = new GameState
         {
             MapSeed = gameSeed,
+        var terrain = Load<List<TerrainDef>>("terrain.json").ToDictionary(x => x.Id, x => x);
+        var resources = Load<List<ResourceDef>>("resources.json").ToDictionary(x => x.Id, x => x);
+        var units = Load<List<UnitDef>>("units.json").ToDictionary(x => x.Id, x => x);
+        var buildings = Load<List<BuildingDef>>("buildings.json").ToDictionary(x => x.Id, x => x);
+        var techs = Load<List<TechDef>>("technologies.json").ToDictionary(x => x.Id, x => x);
+        var factions = Load<List<FactionDef>>("factions.json").ToDictionary(x => x.Id, x => x);
+        var personalities = Load<List<AiPersonalityDef>>("ai_personalities.json").ToDictionary(x => x.Id, x => x);
+        var victory = Load<VictorySettings>("victory.json");
+
+        return new GameConfig
+        {
+            Terrains = terrain,
+            Resources = resources,
+            Units = units,
+            Buildings = buildings,
+            Techs = techs,
+            Factions = factions,
+            AiPersonalities = personalities,
+            Victory = victory
+        };
+    }
+
+    public static GameState NewGame(GameConfig config, int width = 20, int height = 14, int aiPlayers = 2, int? seed = null)
+    {
+        var rng = seed.HasValue ? new Random(seed.Value) : new Random();
+        var state = new GameState
+        {
             Grid = MapGenerator.Generate(width, height, config, rng),
             Players = new List<PlayerState>()
         };
 
         state.Players.Add(new PlayerState { Id = 1, Name = "Aurora League", FactionId = config.Factions.Keys.First(), IsAI = false, Gold = 10 });
+        state.Players.Add(new PlayerState { Id = 1, Name = "Aurora League", FactionId = config.Factions.Keys.First(), IsAI = false });
         for (var i = 0; i < aiPlayers; i++)
         {
             var id = i + 2;
             var factionId = config.Factions.Keys.Skip(i + 1).FirstOrDefault() ?? config.Factions.Keys.First();
             state.Players.Add(new PlayerState { Id = id, Name = $"AI {id}", FactionId = factionId, IsAI = true, Gold = 10 });
+            state.Players.Add(new PlayerState { Id = id, Name = $"AI {id}", FactionId = factionId, IsAI = true });
         }
 
         state.ActivePlayerId = 1;
@@ -65,6 +98,26 @@ public static class GameBootstrap
 
         FogOfWarSystem.UpdateVisibility(state, state.ActivePlayerId);
         state.EventLog.Add($"World seed {gameSeed} generated.");
+            state.Units.Add(new UnitState
+            {
+                Id = state.NextUnitId,
+                OwnerPlayerId = player.Id,
+                UnitDefId = "settler",
+                Coord = start,
+                MovesRemaining = config.Units["settler"].Move
+            });
+
+            state.Units.Add(new UnitState
+            {
+                Id = state.NextUnitId,
+                OwnerPlayerId = player.Id,
+                UnitDefId = "scout",
+                Coord = start,
+                MovesRemaining = config.Units["scout"].Move
+            });
+        }
+
+        FogOfWarSystem.UpdateVisibility(state, state.ActivePlayerId);
         return state;
     }
 }

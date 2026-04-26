@@ -17,3 +17,5 @@ public partial class CityPanelView : RichTextLabel
         Text = $"[b]{city.Name}[/b] (Pop {city.Population})\nFood:{y.Food} Prod:{y.Production} Sci:{y.Science} Gold:{y.Gold}\nStored Food: {city.StoredFood} | Stored Prod: {city.StoredProduction}\nQueue: {(city.ProductionQueue.Count == 0 ? city.CurrentProductionId : string.Join(", ", city.ProductionQueue))}";
     }
 }
+using Godot;
+public partial class CityPanelView : Control { }

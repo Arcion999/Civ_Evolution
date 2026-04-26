@@ -23,3 +23,6 @@
     <None Include="data\**\*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
+    <None Include="data/**/*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
