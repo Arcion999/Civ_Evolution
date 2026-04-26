@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/presentation/MainMenuController.cs" id="1"]
+
+[node name="MainMenu" type="Control"]
+script = ExtResource("1")
+
+[node name="Title" type="Label" parent="."]
+text = "Age of Horizons"
+position = Vector2(40, 30)
+
+[node name="NewGameButton" type="Button" parent="."]
+text = "New Game"
+position = Vector2(40, 90)
+
+[node name="QuitButton" type="Button" parent="."]
+text = "Quit"
+position = Vector2(40, 140)
+
+[connection signal="pressed" from="NewGameButton" to="." method="OnNewGamePressed"]
+[connection signal="pressed" from="QuitButton" to="." method="OnQuitPressed"]

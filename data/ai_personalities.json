@@ -1,0 +1,5 @@
+[
+  {"id":"balanced","name":"Balanced","expansionBias":1.0,"militaryBias":1.0,"scienceBias":1.0},
+  {"id":"aggressive","name":"Aggressive","expansionBias":0.8,"militaryBias":1.4,"scienceBias":0.8},
+  {"id":"expansionist","name":"Expansionist","expansionBias":1.5,"militaryBias":0.9,"scienceBias":0.9}
+]
