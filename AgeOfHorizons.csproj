@@ -3,12 +3,22 @@
     <TargetFramework>net8.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="src/AgeOfHorizons.Core/AgeOfHorizons.Core.csproj" />
-    <Compile Remove="src/AgeOfHorizons.Core/**/*.cs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="src/AgeOfHorizons.Core/**/*.cs" />
+    <Compile Remove="tests/**/*.cs" />
+    <Compile Remove=".godot/**/*.cs" />
+    <Compile Remove="bin/**/*.cs" />
+    <Compile Remove="obj/**/*.cs" />
+  </ItemGroup>
+
   <ItemGroup>
     <None Include="data\**\*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
