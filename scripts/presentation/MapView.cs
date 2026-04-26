@@ -46,6 +46,9 @@ public partial class MapView : Node2D
         return ImageTexture.CreateFromImage(image);
     }
 
+    private const float HexSize = 24f;
+    private GameSceneController _controller = null!;
+
     public void Render(GameState state, GameSceneController controller)
     {
         _controller = controller;
@@ -93,6 +96,22 @@ public partial class MapView : Node2D
             var c = tile.TerrainId == "water" ? new Color("356a9f") : new Color("72965f");
             var p = origin + new Vector2(tile.Coord.Q * 4, tile.Coord.R * 3);
             DrawRect(new Rect2(p, new Vector2(3, 2)), c);
+            var color = tile.TerrainId switch
+            {
+                "water" => new Color("2d5f94"),
+                "forest" => new Color("3e7f4f"),
+                "ridge" => new Color("7a6f66"),
+                _ => new Color("8fb86a")
+            };
+            if (!visible) color = color.Darkened(0.7f);
+            DrawCircle(p, HexSize * 0.8f, color);
+
+            if (Main.State.Cities.Any(c => c.Coord.Equals(tile.Coord)))
+                DrawCircle(p, 6, new Color("ffd166"));
+            if (Main.State.Units.Any(u => !u.Consumed && u.Coord.Equals(tile.Coord)))
+                DrawCircle(p + new Vector2(8, -8), 5, new Color("ef476f"));
+            if (_controller.SelectedTile.HasValue && _controller.SelectedTile.Value.Equals(tile.Coord))
+                DrawArc(p, HexSize, 0, Mathf.Tau, 24, Colors.White, 2);
         }
     }
 
@@ -119,6 +138,13 @@ public partial class MapView : Node2D
     {
         var q = (2f / 3f * (p.X - 80)) / HexSize;
         var r = ((-1f / 3f * (p.X - 80)) + (Mathf.Sqrt(3) / 3f * (p.Y - 80))) / HexSize;
+    private static Vector2 AxialToPixel(HexCoord c)
+        => new(HexSize * (1.5f * c.Q) + 50, HexSize * (Mathf.Sqrt(3) / 2f * c.Q + Mathf.Sqrt(3) * c.R) + 50);
+
+    private static HexCoord PixelToAxial(Vector2 p)
+    {
+        var q = (2f / 3f * (p.X - 50)) / HexSize;
+        var r = ((-1f / 3f * (p.X - 50)) + (Mathf.Sqrt(3) / 3f * (p.Y - 50))) / HexSize;
         return new HexCoord(Mathf.RoundToInt(q), Mathf.RoundToInt(r));
     }
 }

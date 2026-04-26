@@ -37,6 +37,7 @@ public class CityState
     public List<string> ProductionQueue { get; set; } = new();
     public int Population { get; set; } = 1;
     public int StoredFood { get; set; }
+    public int Population { get; set; } = 1;
 }
 
 public class PlayerState
@@ -90,5 +91,6 @@ public class EventLog
     {
         Entries.Add($"T{DateTime.UtcNow:HH:mm:ss} {message}");
         if (Entries.Count > 200) Entries.RemoveAt(0);
+        if (Entries.Count > 100) Entries.RemoveAt(0);
     }
 }

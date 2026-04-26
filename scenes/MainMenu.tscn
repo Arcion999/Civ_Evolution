@@ -39,4 +39,15 @@ size = Vector2(180, 32)
 [connection signal="pressed" from="NewGameButton" to="." method="OnNewGamePressed"]
 [connection signal="pressed" from="LoadGameButton" to="." method="OnLoadGamePressed"]
 [connection signal="pressed" from="OptionsButton" to="." method="OnOptionsPressed"]
+position = Vector2(40, 30)
+
+[node name="NewGameButton" type="Button" parent="."]
+text = "New Game"
+position = Vector2(40, 90)
+
+[node name="QuitButton" type="Button" parent="."]
+text = "Quit"
+position = Vector2(40, 140)
+
+[connection signal="pressed" from="NewGameButton" to="." method="OnNewGamePressed"]
 [connection signal="pressed" from="QuitButton" to="." method="OnQuitPressed"]

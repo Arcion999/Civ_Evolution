@@ -4,8 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 
-namespace AgeOfHorizons.Core
-{
+namespace AgeOfHorizons.Core;
 
 public static class MapGenerator
 {
@@ -25,6 +24,8 @@ public static class MapGenerator
             if (terrainId != "water" && rng.NextDouble() < 0.20)
                 tile.ResourceId = resourceIds[rng.Next(resourceIds.Count)];
 
+            if (rng.NextDouble() < 0.15) terrainId = "water";
+            var tile = new TileState { Coord = new HexCoord(q, r), TerrainId = terrainId };
             grid.Tiles[tile.Coord.ToString()] = tile;
         }
 
@@ -40,6 +41,9 @@ public static class HexPathfinder
         var frontier = new Queue<HexCoord>();
         var cameFrom = new Dictionary<HexCoord, HexCoord?> { [start] = null };
         frontier.Enqueue(start);
+        var cameFrom = new Dictionary<HexCoord, HexCoord?>();
+        frontier.Enqueue(start);
+        cameFrom[start] = null;
 
         while (frontier.Count > 0)
         {
@@ -50,6 +54,19 @@ public static class HexPathfinder
                 var tile = state.Grid.Get(next);
                 if (tile == null || tile.TerrainId == "water") continue;
                 cameFrom[next] = current;
+                if (next.Equals(goal))
+                {
+                    var path = new List<HexCoord> { goal };
+                    var cursor = current;
+                    while (!cursor.Equals(start))
+                    {
+                        path.Add(cursor);
+                        cursor = cameFrom[cursor]!.Value;
+                    }
+                    path.Add(start);
+                    path.Reverse();
+                    return path;
+                }
                 frontier.Enqueue(next);
             }
         }
@@ -67,6 +84,7 @@ public static class HexPathfinder
         }
         path.Reverse();
         return path;
+        return new List<HexCoord>();
     }
 }
 
@@ -85,6 +103,14 @@ public static class MovementSystem
         unit.Coord = target;
         unit.MovesRemaining -= steps;
         if (unit.MovesRemaining == 0) unit.ActionPointsRemaining = 0;
+        var path = HexPathfinder.FindPath(state, unit.Coord, target);
+        if (path.Count < 2) return false;
+        var def = config.Units[unit.UnitDefId];
+        var steps = path.Count - 1;
+        if (steps > Math.Min(unit.MovesRemaining, def.Move)) return false;
+
+        unit.Coord = target;
+        unit.MovesRemaining -= steps;
         return true;
     }
 
@@ -117,6 +143,11 @@ public static class YieldSystem
         if (tile.ImprovementId == "road") influence += 1;
 
         return (food, production, science, gold, culture, influence);
+    public static (int Food, int Production, int Science) CalculateCityYield(GameState state, GameConfig config, CityState city)
+    {
+        var tile = state.Grid.Get(city.Coord)!;
+        var terrain = config.Terrains[tile.TerrainId];
+        return (terrain.Food + city.Population, terrain.Production + 1, terrain.Science + 1);
     }
 }
 
@@ -137,6 +168,7 @@ public static class ProductionSystem
 
         var buildId = city.ProductionQueue.FirstOrDefault() ?? city.CurrentProductionId;
         var unitDef = config.Units.GetValueOrDefault(buildId);
+        var unitDef = config.Units.GetValueOrDefault(city.CurrentProductionId);
         if (unitDef != null && city.StoredProduction >= unitDef.Cost)
         {
             city.StoredProduction -= unitDef.Cost;
@@ -151,6 +183,8 @@ public static class ProductionSystem
             });
             if (city.ProductionQueue.Count > 0)
                 city.ProductionQueue.RemoveAt(0);
+                MovesRemaining = unitDef.Move
+            });
             state.EventLog.Add($"{city.Name} trained {unitDef.Name}.");
         }
     }
@@ -171,6 +205,10 @@ public static class TechTree
         if (player.ResearchedTechs.Contains(tech.Id)) return;
         if (!CanResearch(player, tech)) return;
 
+        player.Science += scienceGain;
+        if (!config.Techs.TryGetValue(player.CurrentResearchTechId, out var tech)) return;
+        if (player.ResearchedTechs.Contains(tech.Id)) return;
+        if (!CanResearch(player, tech)) return;
         if (player.Science >= tech.Cost)
         {
             player.Science -= tech.Cost;
@@ -178,6 +216,7 @@ public static class TechTree
             player.Era = EraSystem.FromTechCount(player.ResearchedTechs.Count);
             state.EventLog.Add($"{player.Name} researched {tech.Name} ({player.Era}).");
 
+            state.EventLog.Add($"{player.Name} researched {tech.Name}.");
             var next = config.Techs.Values.FirstOrDefault(t => !player.ResearchedTechs.Contains(t.Id) && CanResearch(player, t));
             if (next != null) player.CurrentResearchTechId = next.Id;
         }
@@ -194,6 +233,11 @@ public static class CombatSystem
         defender.Health -= Math.Max(8, attack - defense + 18);
         attacker.ActionPointsRemaining = 0;
 
+        if (attacker.Coord.DistanceTo(defender.Coord) > 1) return false;
+        var attack = config.Units[attacker.UnitDefId].Strength;
+        var defense = config.Units[defender.UnitDefId].Strength;
+        defender.Health -= Math.Max(10, attack - defense + 20);
+        attacker.MovesRemaining = 0;
         if (defender.Health <= 0)
         {
             defender.Consumed = true;
@@ -214,6 +258,13 @@ public static class FogOfWarSystem
             AddVision(player.VisibleTiles, unit.Coord, 2, state.Grid);
         foreach (var city in state.Cities.Where(c => c.OwnerPlayerId == playerId))
             AddVision(player.VisibleTiles, city.Coord, 3, state.Grid);
+        {
+            AddVision(player.VisibleTiles, unit.Coord, 2, state.Grid);
+        }
+        foreach (var city in state.Cities.Where(c => c.OwnerPlayerId == playerId))
+        {
+            AddVision(player.VisibleTiles, city.Coord, 2, state.Grid);
+        }
     }
 
     private static void AddVision(HashSet<string> visible, HexCoord center, int radius, HexGrid grid)
@@ -271,6 +322,10 @@ public static class AISystem
         {
             var candidates = u.Coord.Neighbors().Where(state.Grid.Contains)
                 .Where(c => state.Grid.Get(c)?.TerrainId != "water").ToList();
+            var candidates = u.Coord.Neighbors()
+                .Where(state.Grid.Contains)
+                .Where(c => state.Grid.Get(c)?.TerrainId != "water")
+                .ToList();
 
             if (candidates.Count > 0)
             {
@@ -287,6 +342,7 @@ public static class AISystem
                     Name = $"{ai.Name} Hold {state.NextCityId}",
                     Coord = u.Coord,
                     CurrentProductionId = "warrior"
+                    CurrentProductionId = "worker"
                 });
                 u.Consumed = true;
                 state.EventLog.Add($"{ai.Name} founded a city.");
@@ -315,6 +371,7 @@ public static class TurnSystem
                     current.Influence += yields.Influence;
                     ProductionSystem.ProcessCityProduction(state, config, city);
                 }
+                    ProductionSystem.ProcessCityProduction(state, config, city);
                 TechTree.ProcessResearch(state, config, current);
                 processed.Add(current.Id);
             }
@@ -329,6 +386,10 @@ public static class TurnSystem
 
             if (!state.ActivePlayer.IsAI) break;
             AISystem.RunTurn(state, config, state.ActivePlayer, rng);
+            var active = state.ActivePlayer;
+            if (!active.IsAI) break;
+
+            AISystem.RunTurn(state, config, active, rng);
         }
 
         state.Units.RemoveAll(u => u.Consumed);
@@ -338,10 +399,19 @@ public static class TurnSystem
 
 public static class SaveLoadSystem
 {
-    private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions { WriteIndented = true };
+    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
 
     public static void Save(string path, GameState state) => File.WriteAllText(path, JsonSerializer.Serialize(state, JsonOptions));
 
     public static GameState Load(string path) => JsonSerializer.Deserialize<GameState>(File.ReadAllText(path), JsonOptions)!;
-}
+    public static void Save(string path, GameState state)
+    {
+        File.WriteAllText(path, JsonSerializer.Serialize(state, JsonOptions));
+    }
+
+    public static GameState Load(string path)
+    {
+        var json = File.ReadAllText(path);
+        return JsonSerializer.Deserialize<GameState>(json, JsonOptions)!;
+    }
 }

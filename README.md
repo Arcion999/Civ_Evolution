@@ -6,6 +6,7 @@ Age of Horizons is an original turn-based 4X prototype (explore, expand, exploit
 
 ### Prerequisites
 - Godot 4.6.2 Mono/.NET build (or newer 4.6.x)
+- Godot 4.x Mono/.NET build
 - .NET 8 SDK
 
 ### Open the Project
@@ -29,6 +30,13 @@ Age of Horizons is an original turn-based 4X prototype (explore, expand, exploit
 - **Queue Warrior / Queue Builder**: add city production queue items.
 - **Build Farm / Build Mine / Build Camp**: apply tile improvements.
 - **Save / Load**: JSON save/load (`user://savegame.json`).
+- **Left Click** tile: select tile/unit.
+- **Shift + Left Click** tile: move selected unit.
+- **Middle Mouse Drag**: pan camera.
+- **Mouse Wheel**: zoom.
+- **Found City** button: settle city using selected settler.
+- **End Turn** button: process production/research and rotate players.
+- **Save** / **Load** buttons: JSON save/load (`user://savegame.json`).
 
 ## Gameplay Loop (Prototype)
 1. Start a new game.

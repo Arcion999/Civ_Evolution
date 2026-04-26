@@ -9,3 +9,5 @@ public partial class TechPanelView : RichTextLabel
         Text = $"[b]Research[/b]\nCurrent: {p.CurrentResearchTechId}\nStored Science: {p.Science}\nKnown Techs: {p.ResearchedTechs.Count}";
     }
 }
+using Godot;
+public partial class TechPanelView : Control { }

@@ -68,6 +68,8 @@ public partial class GameSceneController : Node2D
         if (!Main.Config.Units[SelectedUnit.UnitDefId].CanFoundCity) return;
         var tile = Main.State.Grid.Get(SelectedTile.Value);
         if (tile == null || tile.TerrainId == "water") return;
+        if (SelectedUnit == null) return;
+        if (!Main.Config.Units[SelectedUnit.UnitDefId].CanFoundCity) return;
 
         Main.State.Cities.Add(new CityState
         {
@@ -76,6 +78,7 @@ public partial class GameSceneController : Node2D
             Name = $"Horizon {Main.State.NextCityId}",
             Coord = SelectedUnit.Coord,
             CurrentProductionId = "warrior"
+            CurrentProductionId = "worker"
         });
         SelectedUnit.Consumed = true;
         Main.State.EventLog.Add("City founded.");
