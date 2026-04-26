@@ -1,0 +1,5 @@
+[
+  {"id":"dawn_unity","name":"Dawn Unity","colorHex":"#6ec1ff","aiPersonality":"balanced"},
+  {"id":"ember_collective","name":"Ember Collective","colorHex":"#ff8c6e","aiPersonality":"aggressive"},
+  {"id":"verdant_pact","name":"Verdant Pact","colorHex":"#8dff6e","aiPersonality":"expansionist"}
+]

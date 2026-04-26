@@ -1,0 +1,7 @@
+[
+  {"id":"settler","name":"Settler Caravan","move":2,"strength":4,"canFoundCity":true,"cost":40},
+  {"id":"scout","name":"Pathfinder","move":3,"strength":8,"canFoundCity":false,"cost":25},
+  {"id":"warrior","name":"Stone Guard","move":2,"strength":14,"canFoundCity":false,"cost":30},
+  {"id":"worker","name":"Civic Crew","move":2,"strength":10,"canFoundCity":false,"cost":28},
+  {"id":"builder","name":"Builder","move":2,"strength":6,"canFoundCity":false,"cost":24}
+]

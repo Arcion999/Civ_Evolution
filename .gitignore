@@ -1,0 +1,8 @@
+.godot/
+.import/
+.mono/
+.vscode/
+*.tmp
+*.import
+bin/
+obj/

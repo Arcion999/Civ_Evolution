@@ -1,0 +1,9 @@
+[
+  {"id":"stone","name":"Stone","food":0,"production":1,"science":0},
+  {"id":"wood","name":"Wood","food":0,"production":1,"science":0},
+  {"id":"wheat","name":"Wheat","food":1,"production":0,"science":0},
+  {"id":"fish","name":"Fish","food":1,"production":0,"science":0},
+  {"id":"copper","name":"Copper","food":0,"production":1,"science":0},
+  {"id":"iron","name":"Iron","food":0,"production":1,"science":0},
+  {"id":"bauxite","name":"Bauxite","food":0,"production":1,"science":1}
+]
