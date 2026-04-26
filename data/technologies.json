@@ -1,0 +1,10 @@
+[
+  {"id":"surveying","name":"Surveying","cost":15,"prereqs":[],"unlocksUnits":["scout"],"unlocksBuildings":[]},
+  {"id":"fire_making","name":"Fire Making","cost":18,"prereqs":[],"unlocksUnits":["warrior"],"unlocksBuildings":[]},
+  {"id":"hunting","name":"Hunting","cost":18,"prereqs":[],"unlocksUnits":["scout"],"unlocksBuildings":[]},
+  {"id":"stone_tools","name":"Stone Tools","cost":20,"prereqs":[],"unlocksUnits":["builder"],"unlocksBuildings":[]},
+  {"id":"agriculture","name":"Agriculture","cost":24,"prereqs":["surveying"],"unlocksUnits":["worker"],"unlocksBuildings":["granary_dome"]},
+  {"id":"mining","name":"Mining","cost":26,"prereqs":["stone_tools"],"unlocksUnits":[],"unlocksBuildings":["forge_hall"]},
+  {"id":"pottery","name":"Pottery","cost":24,"prereqs":["fire_making"],"unlocksUnits":[],"unlocksBuildings":["granary_dome"]},
+  {"id":"bronze_working","name":"Bronze Working","cost":32,"prereqs":["mining"],"unlocksUnits":["warrior"],"unlocksBuildings":["forge_hall"]}
+]

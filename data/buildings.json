@@ -1,0 +1,5 @@
+[
+  {"id":"granary_dome","name":"Granary Dome","cost":40,"food":2,"production":0,"science":0},
+  {"id":"forge_hall","name":"Forge Hall","cost":45,"food":0,"production":2,"science":0},
+  {"id":"observatory","name":"Observatory","cost":50,"food":0,"production":0,"science":2}
+]
