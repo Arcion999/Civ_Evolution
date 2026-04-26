@@ -9,6 +9,7 @@ public class TileState
     public HexCoord Coord { get; set; }
     public string TerrainId { get; set; } = "plains";
     public string? ResourceId { get; set; }
+    public string? ImprovementId { get; set; }
     public int? OwnerPlayerId { get; set; }
     public int? CityId { get; set; }
 }
@@ -20,6 +21,7 @@ public class UnitState
     public string UnitDefId { get; set; } = "scout";
     public HexCoord Coord { get; set; }
     public int MovesRemaining { get; set; }
+    public int ActionPointsRemaining { get; set; } = 1;
     public int Health { get; set; } = 100;
     public bool Consumed { get; set; }
 }
@@ -32,6 +34,9 @@ public class CityState
     public HexCoord Coord { get; set; }
     public int StoredProduction { get; set; }
     public string CurrentProductionId { get; set; } = "worker";
+    public List<string> ProductionQueue { get; set; } = new();
+    public int Population { get; set; } = 1;
+    public int StoredFood { get; set; }
     public int Population { get; set; } = 1;
 }
 
@@ -42,6 +47,10 @@ public class PlayerState
     public string FactionId { get; set; } = "dawn_unity";
     public bool IsAI { get; set; }
     public int Science { get; set; }
+    public int Gold { get; set; }
+    public int Culture { get; set; }
+    public int Influence { get; set; }
+    public string Era { get; set; } = "Stone Age";
     public string CurrentResearchTechId { get; set; } = "surveying";
     public HashSet<string> ResearchedTechs { get; set; } = new();
     public HashSet<string> VisibleTiles { get; set; } = new();
@@ -61,6 +70,7 @@ public class GameState
 {
     public int Turn { get; set; } = 1;
     public int ActivePlayerId { get; set; }
+    public int MapSeed { get; set; }
     public HexGrid Grid { get; set; } = new();
     public List<PlayerState> Players { get; set; } = new();
     public List<UnitState> Units { get; set; } = new();
@@ -80,6 +90,7 @@ public class EventLog
     public void Add(string message)
     {
         Entries.Add($"T{DateTime.UtcNow:HH:mm:ss} {message}");
+        if (Entries.Count > 200) Entries.RemoveAt(0);
         if (Entries.Count > 100) Entries.RemoveAt(0);
     }
 }

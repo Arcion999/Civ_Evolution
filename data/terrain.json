@@ -1,5 +1,11 @@
 [
   {"id":"plains","name":"Plains","moveCost":1,"food":2,"production":1,"science":0,"isWater":false},
+  {"id":"grassland","name":"Grassland","moveCost":1,"food":3,"production":0,"science":0,"isWater":false},
+  {"id":"forest","name":"Forest","moveCost":2,"food":1,"production":2,"science":0,"isWater":false},
+  {"id":"hills","name":"Hills","moveCost":2,"food":1,"production":2,"science":0,"isWater":false},
+  {"id":"mountain","name":"Mountain","moveCost":3,"food":0,"production":1,"science":1,"isWater":false},
+  {"id":"desert","name":"Desert","moveCost":1,"food":0,"production":1,"science":0,"isWater":false},
+  {"id":"tundra","name":"Tundra","moveCost":1,"food":1,"production":1,"science":0,"isWater":false},
   {"id":"forest","name":"Forest","moveCost":2,"food":1,"production":2,"science":0,"isWater":false},
   {"id":"ridge","name":"Ridge","moveCost":2,"food":0,"production":2,"science":1,"isWater":false},
   {"id":"water","name":"Water","moveCost":99,"food":1,"production":0,"science":1,"isWater":true}

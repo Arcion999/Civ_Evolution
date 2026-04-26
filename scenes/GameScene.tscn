@@ -1,3 +1,4 @@
+[gd_scene load_steps=10 format=3]
 [gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/presentation/GameSceneController.cs" id="1"]
@@ -7,6 +8,9 @@
 [ext_resource type="Script" path="res://scripts/presentation/SelectionPanelView.cs" id="5"]
 [ext_resource type="Script" path="res://scripts/presentation/EventLogView.cs" id="6"]
 [ext_resource type="Script" path="res://scripts/presentation/VictoryScreenView.cs" id="7"]
+[ext_resource type="Script" path="res://scripts/presentation/CityPanelView.cs" id="8"]
+[ext_resource type="Script" path="res://scripts/presentation/TechPanelView.cs" id="9"]
+[ext_resource type="Script" path="res://scripts/presentation/DiplomacyPanelView.cs" id="10"]
 
 [node name="GameScene" type="Node2D"]
 script = ExtResource("1")
@@ -20,6 +24,90 @@ script = ExtResource("2")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
+[node name="TopBarView" type="RichTextLabel" parent="CanvasLayer"]
+script = ExtResource("4")
+position = Vector2(8, 8)
+size = Vector2(1140, 30)
+bbcode_enabled = true
+
+[node name="SelectionPanelView" type="RichTextLabel" parent="CanvasLayer"]
+script = ExtResource("5")
+position = Vector2(8, 42)
+size = Vector2(360, 76)
+bbcode_enabled = true
+
+[node name="CityPanelView" type="RichTextLabel" parent="CanvasLayer"]
+script = ExtResource("8")
+position = Vector2(8, 126)
+size = Vector2(360, 116)
+bbcode_enabled = true
+
+[node name="TechPanelView" type="RichTextLabel" parent="CanvasLayer"]
+script = ExtResource("9")
+position = Vector2(8, 248)
+size = Vector2(360, 84)
+bbcode_enabled = true
+
+[node name="DiplomacyPanelView" type="RichTextLabel" parent="CanvasLayer"]
+script = ExtResource("10")
+position = Vector2(8, 338)
+size = Vector2(360, 110)
+bbcode_enabled = true
+
+[node name="EventLogView" type="RichTextLabel" parent="CanvasLayer"]
+script = ExtResource("6")
+position = Vector2(8, 454)
+size = Vector2(450, 216)
+bbcode_enabled = true
+
+[node name="VictoryScreenView" type="Label" parent="CanvasLayer"]
+script = ExtResource("7")
+position = Vector2(430, 12)
+
+[node name="EndTurnButton" type="Button" parent="CanvasLayer"]
+text = "End Turn"
+position = Vector2(992, 42)
+size = Vector2(190, 30)
+
+[node name="SaveButton" type="Button" parent="CanvasLayer"]
+text = "Save"
+position = Vector2(992, 78)
+size = Vector2(92, 30)
+
+[node name="LoadButton" type="Button" parent="CanvasLayer"]
+text = "Load"
+position = Vector2(1090, 78)
+size = Vector2(92, 30)
+
+[node name="FoundCityButton" type="Button" parent="CanvasLayer"]
+text = "Found City"
+position = Vector2(992, 114)
+size = Vector2(190, 30)
+
+[node name="QueueWarriorButton" type="Button" parent="CanvasLayer"]
+text = "Queue Warrior"
+position = Vector2(992, 160)
+size = Vector2(190, 30)
+
+[node name="QueueBuilderButton" type="Button" parent="CanvasLayer"]
+text = "Queue Builder"
+position = Vector2(992, 196)
+size = Vector2(190, 30)
+
+[node name="BuildFarmButton" type="Button" parent="CanvasLayer"]
+text = "Build Farm"
+position = Vector2(992, 242)
+size = Vector2(92, 30)
+
+[node name="BuildMineButton" type="Button" parent="CanvasLayer"]
+text = "Build Mine"
+position = Vector2(1090, 242)
+size = Vector2(92, 30)
+
+[node name="BuildCampButton" type="Button" parent="CanvasLayer"]
+text = "Build Camp"
+position = Vector2(992, 278)
+size = Vector2(190, 30)
 [node name="TopBarView" type="Label" parent="CanvasLayer"]
 script = ExtResource("4")
 position = Vector2(10, 8)
@@ -56,3 +144,8 @@ position = Vector2(980, 110)
 [connection signal="pressed" from="CanvasLayer/SaveButton" to="." method="SaveGame"]
 [connection signal="pressed" from="CanvasLayer/LoadButton" to="." method="LoadGame"]
 [connection signal="pressed" from="CanvasLayer/FoundCityButton" to="." method="FoundCity"]
+[connection signal="pressed" from="CanvasLayer/QueueWarriorButton" to="." method="AddWarriorToQueue"]
+[connection signal="pressed" from="CanvasLayer/QueueBuilderButton" to="." method="AddBuilderToQueue"]
+[connection signal="pressed" from="CanvasLayer/BuildFarmButton" to="." method="BuildFarm"]
+[connection signal="pressed" from="CanvasLayer/BuildMineButton" to="." method="BuildMine"]
+[connection signal="pressed" from="CanvasLayer/BuildCampButton" to="." method="BuildCamp"]

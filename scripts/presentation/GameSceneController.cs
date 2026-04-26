@@ -7,6 +7,9 @@ public partial class GameSceneController : Node2D
     private MapView _mapView = null!;
     private TopBarView _topBar = null!;
     private SelectionPanelView _selection = null!;
+    private CityPanelView _cityPanel = null!;
+    private TechPanelView _techPanel = null!;
+    private DiplomacyPanelView _diploPanel = null!;
     private EventLogView _eventLog = null!;
     private VictoryScreenView _victory = null!;
 
@@ -18,6 +21,9 @@ public partial class GameSceneController : Node2D
         _mapView = GetNode<MapView>("MapView");
         _topBar = GetNode<TopBarView>("CanvasLayer/TopBarView");
         _selection = GetNode<SelectionPanelView>("CanvasLayer/SelectionPanelView");
+        _cityPanel = GetNode<CityPanelView>("CanvasLayer/CityPanelView");
+        _techPanel = GetNode<TechPanelView>("CanvasLayer/TechPanelView");
+        _diploPanel = GetNode<DiplomacyPanelView>("CanvasLayer/DiplomacyPanelView");
         _eventLog = GetNode<EventLogView>("CanvasLayer/EventLogView");
         _victory = GetNode<VictoryScreenView>("CanvasLayer/VictoryScreenView");
         RefreshAll();
@@ -28,6 +34,9 @@ public partial class GameSceneController : Node2D
         _mapView.Render(Main.State, this);
         _topBar.Render(Main.State);
         _selection.Render(this);
+        _cityPanel.Render(Main.State, this);
+        _techPanel.Render(Main.State);
+        _diploPanel.Render(Main.State);
         _eventLog.Render(Main.State);
         _victory.Render(Main.State);
     }
@@ -55,6 +64,10 @@ public partial class GameSceneController : Node2D
 
     public void FoundCity()
     {
+        if (SelectedUnit == null || SelectedTile == null) return;
+        if (!Main.Config.Units[SelectedUnit.UnitDefId].CanFoundCity) return;
+        var tile = Main.State.Grid.Get(SelectedTile.Value);
+        if (tile == null || tile.TerrainId == "water") return;
         if (SelectedUnit == null) return;
         if (!Main.Config.Units[SelectedUnit.UnitDefId].CanFoundCity) return;
 
@@ -64,10 +77,54 @@ public partial class GameSceneController : Node2D
             OwnerPlayerId = SelectedUnit.OwnerPlayerId,
             Name = $"Horizon {Main.State.NextCityId}",
             Coord = SelectedUnit.Coord,
+            CurrentProductionId = "warrior"
             CurrentProductionId = "worker"
         });
         SelectedUnit.Consumed = true;
         Main.State.EventLog.Add("City founded.");
+        RefreshAll();
+    }
+
+    public void AddWarriorToQueue()
+    {
+        var city = GetSelectedCity();
+        if (city == null) return;
+        city.ProductionQueue.Add("warrior");
+        Main.State.EventLog.Add($"{city.Name} queued Warrior.");
+        RefreshAll();
+    }
+
+    public void AddBuilderToQueue()
+    {
+        var city = GetSelectedCity();
+        if (city == null) return;
+        city.ProductionQueue.Add("builder");
+        Main.State.EventLog.Add($"{city.Name} queued Builder.");
+        RefreshAll();
+    }
+
+    public void BuildFarm()
+    {
+        ApplyTileImprovement("farm");
+    }
+
+    public void BuildMine()
+    {
+        ApplyTileImprovement("mine");
+    }
+
+    public void BuildCamp()
+    {
+        ApplyTileImprovement("camp");
+    }
+
+    private void ApplyTileImprovement(string improvement)
+    {
+        if (!SelectedTile.HasValue) return;
+        var tile = Main.State.Grid.Get(SelectedTile.Value);
+        if (tile == null || tile.TerrainId == "water") return;
+        tile.ImprovementId = improvement;
+        Main.State.EventLog.Add($"Built {improvement} on {SelectedTile.Value}.");
         RefreshAll();
     }
 
@@ -91,5 +148,11 @@ public partial class GameSceneController : Node2D
             }
         }
         RefreshAll();
+    }
+
+    private CityState? GetSelectedCity()
+    {
+        if (!SelectedTile.HasValue) return null;
+        return Main.State.Cities.FirstOrDefault(c => c.Coord.Equals(SelectedTile.Value) && c.OwnerPlayerId == Main.State.ActivePlayerId);
     }
 }

@@ -20,6 +20,16 @@ Age of Horizons is an original turn-based 4X prototype (explore, expand, exploit
 - Starts in main menu (`New Game`, `Quit`).
 
 ## Controls
+- **W/A/S/D**: pan camera across the world.
+- **Middle Mouse Drag**: pan camera.
+- **Mouse Wheel**: smooth zoom in/out.
+- **Left Click** tile: select tile/unit/city tile.
+- **Shift + Left Click** tile: move selected unit.
+- **End Turn**: process yields, growth, production, research, AI turns.
+- **Found City**: settle with settler on valid land tile.
+- **Queue Warrior / Queue Builder**: add city production queue items.
+- **Build Farm / Build Mine / Build Camp**: apply tile improvements.
+- **Save / Load**: JSON save/load (`user://savegame.json`).
 - **Left Click** tile: select tile/unit.
 - **Shift + Left Click** tile: move selected unit.
 - **Middle Mouse Drag**: pan camera.
@@ -94,3 +104,9 @@ JSON files in `data/` define:
 6. Unit promotions and ranged combat.
 7. Tooltips, production queue UI, and minimap.
 8. Deterministic save/load compatibility versioning.
+
+
+## Art / Assets
+- To keep this repository binary-free, visual assets are generated at runtime by `MapView.cs`.
+- The `assets/README.md` file documents this approach.
+- No external art downloads are required for the prototype.
